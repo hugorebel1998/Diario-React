@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { JournalApp } from './JournalApp.jsx'
+import { BrowserRouter } from "react-router-dom";
 
 import './styles.css'
 
@@ -12,6 +13,8 @@ import '@fontsource/roboto/700.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <JournalApp />
+    <BrowserRouter>
+      <JournalApp />
+    </BrowserRouter>
   </React.StrictMode>,
 )
