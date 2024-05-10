@@ -1,11 +1,31 @@
 import React from 'react'
 import { JournalLayout } from '../layout/JournalLayout'
-import { Typography } from '@mui/material'
+import { Note, NothingSelected } from '../view'
+import { IconButton } from '@mui/material'
+import { AddOutlined } from '@mui/icons-material'
 
 export const Home = () => {
     return (
         <JournalLayout>
-            <Typography>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia tempora tenetur doloremque dolores tempore molestiae quidem. Quaerat, sapiente veniam sed omnis dicta vitae quam perferendis perspiciatis ipsum ipsam obcaecati et.</Typography>
+
+            <NothingSelected />
+            {/* <Note /> */}
+
+
+            <IconButton
+                size='large'
+                sx={{
+                    color: 'white',
+                    backgroundColor: 'error.main',
+                    ':hover': { backgroundColor: 'error.main', opacity: 0.9 },
+                    position: 'fixed',
+                    right: 50,
+                    bottom: 50
+                }}
+            >
+                <AddOutlined sx={{ fontSize: 30 }} />
+
+            </IconButton>
         </JournalLayout>
     )
 }
