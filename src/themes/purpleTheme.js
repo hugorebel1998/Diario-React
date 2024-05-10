@@ -12,5 +12,10 @@ export const purpleTheme = createTheme({
         error: {
             main: red.A400
         }
-    }
+    },
+    typography: {
+        button: {
+            textTransform: 'none',
+        },
+    },
 });
