@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks/useForm';
@@ -7,18 +8,33 @@ import AddIcon from '@mui/icons-material/Add';
 
 
 const usuario = {
-    username: 'hguillermo96',
-    email: 'hugo_gs1996@hotmail.com',
-    password: '12345678'
+    username: '',
+    email: '',
+    password: ''
 }
+
+const formValidations = {
+    username: [(value) => value.length >= 1, 'El nombre es obligatorio'],
+    email: [(value) => value.includes('@'), 'EL correo no incluye un @.'],
+    password: [(value) => value.length >= 6, 'La contraseña debe de contener más de 6 caracteres'],
+};
+
 
 export const Register = () => {
 
-    const { username, email, password, formState, onInputChange } = useForm(usuario);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+
+    const { formState, username, email, password, usernameValid, emailValid, passwordValid, isFormValid, onInputChange } = useForm(usuario, formValidations);
+
 
     const onSubmit = (event) => {
         event.preventDefault();
-        console.log({usuario: formState})
+
+        setFormSubmitted(true);
+
+        if (!isFormValid)
+            return;
+        console.log({ usuario: formState })
     }
 
 
@@ -32,12 +48,13 @@ export const Register = () => {
                             placeholder='Nombre completo'
                             fullWidth
                             type='text'
-                            required
                             variant="standard"
                             autoComplete="off"
                             name='username'
                             value={username}
                             onChange={onInputChange}
+                            error={!!usernameValid && formSubmitted}
+                            helperText={usernameValid}
 
                         />
                     </Grid>
@@ -48,12 +65,13 @@ export const Register = () => {
                             placeholder='Correo electrónico'
                             fullWidth
                             type='email'
-                            required
                             variant="standard"
                             autoComplete="off"
                             name='email'
                             value={email}
                             onChange={onInputChange}
+                            error={!!emailValid && formSubmitted}
+                            helperText={emailValid}
                         />
                     </Grid>
 
@@ -63,12 +81,13 @@ export const Register = () => {
                             placeholder='Contraseña'
                             fullWidth
                             type='password'
-                            required
                             variant="standard"
                             autoComplete="off"
                             name='password'
                             value={password}
                             onChange={onInputChange}
+                            error={!!passwordValid && formSubmitted}
+                            helperText={passwordValid}
                         />
                     </Grid>
                 </Grid>
