@@ -11,9 +11,9 @@ import { useMemo } from 'react';
 
 
 const usuario = {
-    username: 'Hugo',
-    email: 'hugo@gogle.com',
-    password: '12345678'
+    username: '',
+    email: '',
+    password: ''
 }
 
 const formValidations = {
@@ -36,6 +36,7 @@ export const Register = () => {
     const { formState, username, email, password, usernameValid, emailValid, passwordValid, isFormValid, onInputChange } = useForm(usuario, formValidations);
 
 
+    console.log({isFormValid, emailValid, passwordValid})
     const onSubmit = (event) => {
         event.preventDefault();
 
@@ -64,7 +65,7 @@ export const Register = () => {
                             value={username}
                             onChange={onInputChange}
                             error={!!usernameValid && formSubmitted}
-                            helperText={usernameValid}
+                            // helperText={usernameValid}
 
                         />
                     </Grid>

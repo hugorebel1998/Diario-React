@@ -1,4 +1,4 @@
-import { singInWithFacebook, singInWithGitHub, singInWithGoogle, singInWithEmailAndPassword, singEmailAndPassword } from "../../firebase/provider"
+import { singInWithFacebook, singInWithGitHub, singInWithGoogle, singInWithEmailAndPassword, singEmailAndPassword, logoutFirebare } from "../../firebase/provider"
 import { checkingCredentials, login, logout } from "./authSlice"
 
 export const checkingAutentication = (email, password) => {
@@ -93,5 +93,15 @@ export const startLogin = ({ email, password }) => {
 
 
         dispatch(login(result));
+    }
+}
+
+export const startLogout = () => {
+
+    return async (dispatch) => {
+
+        await logoutFirebare()
+
+        dispatch(logout())
     }
 }

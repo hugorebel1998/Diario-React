@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client'
 import { JournalApp } from './JournalApp.jsx'
 import { store } from './store';
 
+import 'animate.css';
 import './styles.css'
 
 // Fonts Roboto
