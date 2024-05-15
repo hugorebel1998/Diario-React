@@ -1,7 +1,35 @@
-import { GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, GithubAuthProvider } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, FacebookAuthProvider, GithubAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 import { FirebaseAuth } from './config';
 
+export const singEmailAndPassword = async ({ email, password }) => {
+
+    try {
+
+        const result = await signInWithEmailAndPassword(FirebaseAuth, email, password);
+
+        const { displayName, photoURL, uid } = result.user
+
+        return {
+            success: true,
+            email,
+            displayName,
+            photoURL,
+            uid
+        };
+
+    } catch (error) {
+
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        return {
+            success: false,
+            errorCode,
+            errorMessage,
+        };
+    }
+}
 
 export const singInWithGoogle = async () => {
 
@@ -95,5 +123,38 @@ export const singInWithGitHub = async () => {
             errorCode,
             errorMessage,
         };
+    }
+}
+
+export const singInWithEmailAndPassword = async ({ username, email, password }) => {
+
+    try {
+        const result = await createUserWithEmailAndPassword(FirebaseAuth, email, password)
+
+        const { photoURL, uid, displayName } = result.user
+
+        // Se actualiza el displayNAme ya que no lo tenemos
+        await updateProfile(FirebaseAuth.currentUser, { displayName: username })
+
+        return {
+            success: true,
+            email,
+            username,
+            displayName,
+            photoURL,
+            uid
+        };
+
+
+    } catch (error) {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        return {
+            success: false,
+            errorCode,
+            errorMessage,
+        };
+
     }
 }

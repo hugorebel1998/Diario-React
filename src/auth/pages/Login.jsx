@@ -1,38 +1,39 @@
+import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthLayout } from '../layout/AuthLayout';
 import { useForm } from '../../hooks/useForm';
-import { checkingAutentication, startFacebookSign, startGitHubSign, startGoogleSign } from '../../store/auth';
+import { startFacebookSign, startGitHubSign, startGoogleSign, startLogin } from '../../store/auth';
 
-import { Button, Grid, Link, TextField } from '@mui/material'
+import { Alert, Button, Grid, IconButton, Link, TextField } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 const usuario = {
-    email: 'hugorebel1998@gmail.com',
-    password: '12345678'
+    email: '',
+    password: ''
 }
 
 export const Login = () => {
 
     const dispatch = useDispatch();
-    const { status } = useSelector((state) => state.auth)
+    const { status, errorMessage } = useSelector((state) => state.auth)
 
-    const { email, password, onInputChange } = useForm(usuario);
+    const isCheckingStatus = useMemo(() => status === 'en-revision', [status])
+
+    const { formState, email, password, onInputChange } = useForm(usuario);
 
 
     const onSubmit = (event) => {
         event.preventDefault();
 
-
-        dispatch(checkingAutentication());
+        dispatch(startLogin(formState));
 
     }
 
     const onGoogleSignIn = () => {
-        console.log("click..")
 
         dispatch(startGoogleSign());
     }
@@ -82,39 +83,49 @@ export const Login = () => {
                 </Grid>
 
                 <Grid container spacing={2} sx={{ mt: 1 }}>
+
+                    <Grid item xs={12} md={12} lg={12} display={!!errorMessage ? '' : 'none'}>
+                        <Alert severity="error">{errorMessage}</Alert>
+                    </Grid>
+
                     <Grid item xs={12} md={12} lg={12}>
                         <Button
-                            disabled={status == 'en-revision'}
+                            disabled={isCheckingStatus}
                             type='submit'
                             variant="contained"
                             fullWidth startIcon={<LoginIcon />}>Inicio sesión</Button>
                     </Grid>
+                </Grid>
 
-                    <Grid item xs={12} md={12} lg={4}>
-                        <Button
-                            disabled={status == 'en-revision'}
-                            type='button'
+                <Grid container direction="row" justifyContent="center" spacing={2} sx={{ mt: 2 }}>
+                    <Grid item xs={1} md={1} lg={1}>
+                        <IconButton
+                            color='primary'
+                            disabled={isCheckingStatus}
                             onClick={onGoogleSignIn}
-                            variant="contained"
-                            fullWidth startIcon={<GoogleIcon />}>Google</Button>
+                            aria-label="Google">
+                            <GoogleIcon />
+                        </IconButton>
                     </Grid>
 
-                    <Grid item xs={12} md={12} lg={4}>
-                        <Button
-                            disabled={status == 'en-revision'}
-                            type='button'
+                    <Grid item xs={1} md={1} lg={1}>
+                        <IconButton
+                            color='primary'
+                            disabled={isCheckingStatus}
                             onClick={onFacebookSignIn}
-                            variant="contained"
-                            fullWidth startIcon={<FacebookIcon />}>Facebook</Button>
+                            aria-label="Facebook">
+                            <FacebookIcon />
+                        </IconButton>
                     </Grid>
 
-                    <Grid item xs={12} md={12} lg={4}>
-                        <Button
-                            disabled={status == 'en-revision'}
-                            type='button'
+                    <Grid item xs={1} md={1} lg={1}>
+                        <IconButton
+                            color='primary'
+                            disabled={isCheckingStatus}
                             onClick={onGitHubSignIn}
-                            variant="contained"
-                            fullWidth startIcon={<GitHubIcon />}>GitHub</Button>
+                            aria-label="GitHub">
+                            <GitHubIcon />
+                        </IconButton>
                     </Grid>
                 </Grid>
 

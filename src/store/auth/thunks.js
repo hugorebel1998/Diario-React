@@ -1,4 +1,4 @@
-import { singInWithFacebook, singInWithGitHub, singInWithGoogle } from "../../firebase/provider"
+import { singInWithFacebook, singInWithGitHub, singInWithGoogle, singInWithEmailAndPassword, singEmailAndPassword } from "../../firebase/provider"
 import { checkingCredentials, login, logout } from "./authSlice"
 
 export const checkingAutentication = (email, password) => {
@@ -6,7 +6,6 @@ export const checkingAutentication = (email, password) => {
     return async (dispatch) => {
         // Se propesa las credenciales del usuario
         dispatch(checkingCredentials())
-
 
     }
 }
@@ -48,11 +47,46 @@ export const startFacebookSign = () => {
 export const startGitHubSign = () => {
 
     return async (dispatch) => {
-        dispatch(checkingCredentials())
+        dispatch(checkingCredentials());
 
 
         const result = await singInWithGitHub();
 
+
+        if (!result.success)
+            return dispatch(logout(result.errorMessage));
+
+
+        dispatch(login(result));
+    }
+}
+
+export const startEmailAndPassword = ({ username, email, password }) => {
+
+    return async (dispatch) => {
+        dispatch(checkingCredentials());
+
+        const result = await singInWithEmailAndPassword({ username, email, password })
+
+        console.log(result.errorMessage)
+
+
+        if (!result.success)
+            return dispatch(logout(result.errorMessage));
+
+
+        dispatch(login(result));
+    }
+}
+
+
+export const startLogin = ({ email, password }) => {
+
+    return async (dispatch) => {
+
+        dispatch(checkingCredentials());
+
+        const result = await singEmailAndPassword({ email, password })
 
         if (!result.success)
             return dispatch(logout(result.errorMessage));

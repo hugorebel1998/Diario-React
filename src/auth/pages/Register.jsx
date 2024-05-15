@@ -1,16 +1,19 @@
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Navigate, Link as RouterLink } from 'react-router-dom';
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks/useForm';
 
-import { Button, Grid, Link, TextField } from '@mui/material'
+import { Alert, Button, Grid, Link, TextField } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
+import { useDispatch, useSelector } from 'react-redux';
+import { startEmailAndPassword } from '../../store/auth';
+import { useMemo } from 'react';
 
 
 const usuario = {
-    username: '',
-    email: '',
-    password: ''
+    username: 'Hugo',
+    email: 'hugo@gogle.com',
+    password: '12345678'
 }
 
 const formValidations = {
@@ -21,6 +24,12 @@ const formValidations = {
 
 
 export const Register = () => {
+
+
+    const dispatch = useDispatch();
+    const { status, errorMessage } = useSelector((state) => state.auth);
+
+    const isCheckingStatus = useMemo(() => status === 'en-revision', [status])
 
     const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -34,7 +43,8 @@ export const Register = () => {
 
         if (!isFormValid)
             return;
-        console.log({ usuario: formState })
+
+        dispatch(startEmailAndPassword(formState));
     }
 
 
@@ -93,8 +103,12 @@ export const Register = () => {
                 </Grid>
 
                 <Grid container spacing={2} sx={{ mt: 1 }}>
+                    <Grid item xs={12} md={12} lg={12} display={!!errorMessage ? '' : 'none'}>
+                        <Alert severity="error">{errorMessage}</Alert>
+                    </Grid>
+
                     <Grid item xs={12} md={12} lg={12}>
-                        <Button type='submit' variant="contained" fullWidth startIcon={<AddIcon />}>Crear cuenta</Button>
+                        <Button disabled={isCheckingStatus} type='submit' variant="contained" fullWidth startIcon={<AddIcon />}>Crear cuenta</Button>
                     </Grid>
                 </Grid>
 
